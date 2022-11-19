@@ -1,13 +1,3 @@
 # Ethernaut solutions
 
-Went into the rabbithole of SmartContract security
-
-Try running some of the following tasks:
-
-```shell
-npx hardhat help
-npx hardhat test
-REPORT_GAS=true npx hardhat test
-npx hardhat node
-npx hardhat run scripts/deploy.js
-```
+Smart Contract security challenges for Solidity Devs
