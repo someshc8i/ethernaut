@@ -15,6 +15,7 @@ async function main() {
     const privacy = Privacy.attach(INSTANCE_ADDRESS);
 
     console.log(await privacy.locked());
+    // use await ethers.provider.getStorageAt(INSTANCE_ADDRESS,"0x5","latest") to get the slot data;
     const slotData = '0xc0acbb0100608c639ad20ed0ce841bc2a6c41c981ee1a7a022ed064266d97a39';
 
     const PrivacyHack = await hre.ethers.getContractFactory("PrivacyHack");
