@@ -8,9 +8,26 @@ const { ethers } = require("hardhat");
 const hre = require("hardhat");
 
 async function main() {
-    const INSTANCE_ADDRESS = '0xCc71FBe0186938faF62808951215FAf1Dfa7bd22';
+    // Gate 2 is damn tricky. After wasting sometime, decided to pick this level later
+    // const INSTANCE_ADDRESS = '0xCc71FBe0186938faF62808951215FAf1Dfa7bd22';
     const [owner, addr1] = await ethers.getSigners();
-    
+
+    const GatekeeperHack = await hre.ethers.getContractFactory("GatekeeperHack");
+    const gatekeeperHack = await GatekeeperHack.deploy();
+    await gatekeeperHack.deployed()
+
+    const GatekeeperOne = await hre.ethers.getContractFactory("GatekeeperOne");
+    const gatekeeper = await GatekeeperOne.deploy();
+    await gatekeeper.deployed()
+
+    const address = await owner.getAddress()
+    const uint16TxOrigin = address.slice(-4)
+    const gateKey = `0x100000000000${uint16TxOrigin}`
+
+    const tx = await gatekeeperHack.enter(gatekeeper.address, gateKey);
+    await tx.wait()
+
+    console.log(await gatekeeper.entrant());
     
 }
 

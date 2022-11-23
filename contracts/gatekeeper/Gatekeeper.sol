@@ -11,7 +11,7 @@ contract GatekeeperOne {
   }
 
   modifier gateTwo() {
-    require(gasleft() % 8191 == 0);
+    require(gasleft() % 8191 == 0, "No gas");
     _;
   }
 
