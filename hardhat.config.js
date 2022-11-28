@@ -6,7 +6,17 @@ require("dotenv").config();
 const { GOERLI_RPC_PROVIDER, GOERLI_PRIVATE_KEY } = process.env
 
 module.exports = {
-  solidity: "0.8.17",
+  solidity: {
+    compilers: [
+      {
+        version: "0.8.17"
+      },
+      {
+        version: "0.5.0",
+        settings: {},
+      },
+    ]
+  },
   networks: {
     goerli: {
       url: GOERLI_RPC_PROVIDER,
