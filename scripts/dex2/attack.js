@@ -25,7 +25,6 @@ async function main() {
     await dex.deployed();
 
     let SwappableToken = await hre.ethers.getContractFactory("SwappableTokenTwo");
-    let SwappableTokenTwoHack = await hre.ethers.getContractFactory("SwappableTokenTwoHack");
     let token1 = await SwappableToken.deploy(dex.address, "TST1", "TST1", 110);
     await token1.deployed();
 
@@ -43,14 +42,14 @@ async function main() {
     await tx.wait()
 
     // admin setup done
-    
+
+
+    let SwappableTokenTwoHack = await hre.ethers.getContractFactory("SwappableTokenTwoHack");
+
     SwappableToken = SwappableToken.connect(player)
     SwappableTokenTwoHack = SwappableTokenTwoHack.connect(player)
     let dummyToken = await SwappableTokenTwoHack.deploy(dex.address, "DM", "DM", 20);
     await dummyToken.deployed();
-
-    
-    
 
     dex = dex.connect(player)
     token1 = token1.connect(player)
