@@ -6,8 +6,9 @@
 // global scope, and execute the script.
 const hre = require("hardhat");
 
-async function print_balances(player, token1, token2, dex) {
-    // Will pick it up later
+async function print_balances(player, token1, token2, dex, num) {
+
+    console.log(`.........swap-${num}.............`)
     console.log('1-P', await token1.balanceOf(player.address))
     console.log('2-P', await token2.balanceOf(player.address))
     console.log('1-D', await token1.balanceOf(dex.address))
@@ -24,12 +25,16 @@ async function main() {
     let dex = await Dex.deploy();
     await dex.deployed();
 
+    
+
     const SwappableToken = await hre.ethers.getContractFactory("SwappableToken");
     let token1 = await SwappableToken.deploy(dex.address, "TST1", "TST1", 110);
     await token1.deployed();
 
     let token2 = await SwappableToken.deploy(dex.address, "TST2", "TST2", 110);
     await token2.deployed();
+
+    await (await dex.setTokens(token1.address, token2.address)).wait();
 
     
     await token1.transfer(dex.address, 100)
@@ -43,15 +48,38 @@ async function main() {
 
     await token1.approve(dex.address, 10)
     await token2.approve(dex.address, 10)
-    await print_balances(player, token1, token2, dex);
+    await print_balances(player, token1, token2, dex, 0);
     tx = await dex.swap(token1.address, token2.address, 10);
     tx.wait()
-    await print_balances(player, token1, token2, dex);
 
+    await print_balances(player, token1, token2, dex, 1);
+    await token2.approve(dex.address, 20)
+    tx = await dex.swap(token2.address, token1.address, 20);
+    tx.wait()
 
+    await print_balances(player, token1, token2, dex, 2);
+    await token1.approve(dex.address, 24)
+    tx = await dex.swap(token1.address, token2.address, 24);
+    tx.wait()
 
+    await print_balances(player, token1, token2, dex, 3);
+    await token2.approve(dex.address, 30)
+    tx = await dex.swap(token2.address, token1.address, 30);
+    tx.wait()
 
+    await print_balances(player, token1, token2, dex, 4);
+    await token1.approve(dex.address, 41)
+    tx = await dex.swap(token1.address, token2.address, 41);
+    tx.wait()
 
+    await print_balances(player, token1, token2, dex, 5);
+
+    console.log(await dex.getSwapPrice(token2.address, token1.address, 45))
+    await token2.approve(dex.address, 45)
+    tx = await dex.swap(token2.address, token1.address, 45);
+    tx.wait()
+
+    await print_balances(player, token1, token2, dex, 'last');
 }
 
 // We recommend this pattern to be able to use async/await everywhere
